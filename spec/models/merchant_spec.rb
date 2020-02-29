@@ -8,6 +8,7 @@ RSpec.describe Merchant, type: :model do
     it { should validate_presence_of :state }
     it { should validate_presence_of :zip }
     it { should validate_inclusion_of(:disabled).in_array([true,false]) }
+    it { should have_many :discounts}
   end
 
   describe "relationships" do
