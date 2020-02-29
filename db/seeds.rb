@@ -21,11 +21,11 @@ Item.destroy_all
 @j = Merchant.create(name: "J's Furniture Shop", address: '147 Bike Rd.', city: 'Denver', state: 'CO', zip: 80206)
 
 #regular users - users with different roles
-@regular_user = User.create(name: "Mike",street_address: "456 Logan St. Denver, CO",
+@regular_user = @j.users.create(name: "Mike",street_address: "456 Logan St. Denver, CO",
                                                     city: "denver",state: "CO",zip: "80206",email: "new_email1@gmail.com",password: "hamburger1", role: 1)
-@regular_user2 = User.create(name: "Moe",street_address: "1356 Lacienaga Ct. Denver, CO",
+@regular_user2 = @mike.users.create(name: "Moe",street_address: "1356 Lacienaga Ct. Denver, CO",
                                                     city: "denver",state: "CO",zip: "80305",email: "new_email2@gmail.com",password: "hamburger1", role: 1)
-@regular_user3 = User.create(name: "Ben", street_address: "891 Penn St. Denver, CO",
+@merchant_user = @meg.users.create(name: "Ben", street_address: "891 Penn St. Denver, CO",
 city: "denver",state: "CO",zip: "80206",email: "merchant@gmail.com",password: "hamburger2", role: 2)
 
 # merchant items - the items linked to each of the shops above
@@ -43,7 +43,7 @@ city: "denver",state: "CO",zip: "80206",email: "merchant@gmail.com",password: "h
 @order_4 = @regular_user2.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 2)
 @order_5 = @regular_user2.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 3)
 @order_6 = @regular_user2.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 0)
-@order_7 = @regular_user3.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 3)
+@order_7 = @merchant_user.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 3)
 
 # item_orders - link the order with an item (user info and the item linked to a shop)
 @item_order1 = ItemOrder.create!(item: @tire, order: @order_1, price: @tire.price, quantity: 7)
