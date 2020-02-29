@@ -42,8 +42,4 @@ class Order < ApplicationRecord
   def merchant_total(merchant_id)
     item_orders.joins(:item).where(items: {merchant_id: merchant_id}).sum('item_orders.price * item_orders.quantity')
   end
-
-  def discounts
-    require "pry"; binding.pry
-  end
 end
