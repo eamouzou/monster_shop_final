@@ -12,4 +12,4 @@ Zip Code:
 Email:
 <%= @user.email %></br>
 <%= link_to 'Edit Password', "/profile/#{@user.id}/edit_password" %>
-<%= link_to 'My Orders', "/profile/orders" %>
+<%= link_to 'My Orders', "/profile/orders/#{@user.id}" %>
