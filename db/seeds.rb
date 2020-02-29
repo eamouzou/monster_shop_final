@@ -5,38 +5,54 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-
+ItemOrder.destroy_all
+Order.destroy_all
+User.destroy_all
 Merchant.destroy_all
 Item.destroy_all
-#Admin user to login with
-admin = User.create!(name: "Neo Archer", street_address: "953 Matrix Ave",
-  city: "New York", state: "NY", zip: "54874", email: "admin@gmail.com", password: "admin", role: 3)
-#merchants and merchant employees
-bike_shop = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
-merchant_user2 = bike_shop.users.create!(name: "Lance Armstrong", street_address: "571 Cheater St",
-  city: "Colorado Springs", state: "CO", zip: "80206", email: "merchant2@gmail.com", password: "hamburger3", role: 2)
 
-dog_shop = Merchant.create(name: "Brian's Dog Shop", address: '125 Doggo St.', city: 'Denver', state: 'CO', zip: 80210)
-merchant_user = dog_shop.users.create!(name: "Ben Thayer", street_address: "891 Penn St",
-                          city: "Denver",state: "CO",zip: "80206",email: "merchant@gmail.com",password: "hamburger2", role: 2)
-#Regular user to login in with
-regular_user = User.create!(name: "Bill Nye", street_address: "6578 Penn St NW",
-                          city: "Los Angeles",state: "CA",zip: "90036",email: "regular_user@gmail.com",password: "regular", role: 1)
+# admin users
+@admin_user = User.create!(name: "John",street_address: "123 Colfax St. Denver, CO",
+                          city: "denver",state: "CO",zip: "80206",email: "new_email3@gmail.com",password: "hamburger3", role: 3)
+
+# merchants or merchant shops - the shops that sell items for users to buy
+@mike = Merchant.create(name: "Mike's Print Shop", address: '123 Paper Rd.', city: 'Denver', state: 'CO', zip: 80201)
+@meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
+@j = Merchant.create(name: "J's Furniture Shop", address: '147 Bike Rd.', city: 'Denver', state: 'CO', zip: 80206)
+
+#regular users - users with different roles
+@regular_user = User.create(name: "Mike",street_address: "456 Logan St. Denver, CO",
+                                                    city: "denver",state: "CO",zip: "80206",email: "new_email1@gmail.com",password: "hamburger1", role: 1)
+@regular_user2 = User.create(name: "Moe",street_address: "1356 Lacienaga Ct. Denver, CO",
+                                                    city: "denver",state: "CO",zip: "80305",email: "new_email2@gmail.com",password: "hamburger1", role: 1)
+@regular_user3 = User.create(name: "Ben", street_address: "891 Penn St. Denver, CO",
+city: "denver",state: "CO",zip: "80206",email: "merchant@gmail.com",password: "hamburger2", role: 2)
+
+# merchant items - the items linked to each of the shops above
+@tire = @meg.items.create(name: "Tire", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
+@shifter = @meg.items.create(name: "Shimano Shifters", description: "It'll always shift!", active?: false, price: 180, image: "https://images-na.ssl-images-amazon.com/images/I/4142WWbN64L._SX466_.jpg", inventory: 2)
+@paper = @mike.items.create(name: "Lined Paper", description: "Great for writing on!", price: 20, image: "https://cdn.vertex42.com/WordTemplates/images/printable-lined-paper-wide-ruled.png", inventory: 3)
+@yellow_pencil = @mike.items.create(name: "Yellow Pencil", description: "You can write on paper with it!", price: 2, image: "https://images-na.ssl-images-amazon.com/images/I/31BlVr01izL._SX425_.jpg", inventory: 100)
+@chain = @j.items.create(name: "Chain", description: "It'll never break!", price: 50, image: "https://www.rei.com/media/b61d1379-ec0e-4760-9247-57ef971af0ad?size=784x588", inventory: 5)
 
 
+# orders - users and their information (tells you which user is ordering and the status of the order)
+@order_1 = @regular_user.orders.create(name: @regular_user.name, address: @regular_user.street_address, city: @regular_user.city, state: @regular_user.state, zip: @regular_user.zip, status: 0)
+@order_2 = @regular_user.orders.create(name: @regular_user.name, address: @regular_user.street_address, city: @regular_user.city, state: @regular_user.state, zip: @regular_user.zip, status: 1)
+@order_3 = @regular_user.orders.create(name: @regular_user.name, address: @regular_user.street_address, city: @regular_user.city, state: @regular_user.state, zip: @regular_user.zip, status: 2)
+@order_4 = @regular_user2.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 2)
+@order_5 = @regular_user2.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 3)
+@order_6 = @regular_user2.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 0)
+@order_7 = @regular_user3.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 3)
 
-
-#bike_shop items
-tire = bike_shop.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
-maxxis_DH = bike_shop.items.create(name: "Maxxis DHR", description: "Awesome grp!", price: 150, image: "https://i.ebayimg.com/images/i/142126821783-0-1/s-l1000.jpg", inventory: 5)
-death_grips = bike_shop.items.create(name: "death grips ", description: "Awesome grips!", price: 40, image: "https://brink.uk/assets/images/generic/DMR-Brendog-Death-Grips.jpg", inventory: 25)
-downhill_rims = bike_shop.items.create(name: "STANS flow s1  29er", description: "Awesome rim!", price: 250, image: "https://www.wigglestatic.com/product-media/163035/Stans-No-Tubes-Flow-S1-MTB-Wheelset-Internal-Black-Grey-NotSet-850-WS1FL7004-6.jpg?w=2000&h=2000&a=7", inventory: 12)
-xx1 = bike_shop.items.create(name: "XX1 eagle cassette", description: "Best around", price: 700, image: "https://content.competitivecyclist.com/images/items/1200/SRM/SRM009X/GD.jpg", inventory: 4)
-cranks = bike_shop.items.create(name: "carbon cranks ", description: "LIGHT", price: 300, image: "https://www.sefiles.net/images/library/zoom/sram-x7-crankset-44-32-22-9-speed-copy-184997-1.jpg", inventory: 4)
-
-#dog_shop items
-pull_toy = dog_shop.items.create(name: "Pull Toy", description: "Great pull toy!", price: 10, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 32)
-dog_bone = dog_shop.items.create(name: "Dog Bone", description: "They'll love it!", price: 21, image: "https://img.chewy.com/is/image/catalog/54226_MAIN._AC_SL1500_V1534449573_.jpg", active?:false, inventory: 21)
-dog_bath = dog_shop.items.create(name: "Bath", description: "They'll be clean!", price: 50, image: "https://naturaldogcompany.com/wp-content/uploads/2018/03/dog-bubble-bath-web.jpg", active?:false, inventory: 21)
-chuck_it = dog_shop.items.create(name: "Chuck It", description: "They'll fetch it!", price: 10, image: "https://www.halfmoonoutfitters.com/assets/images/jumbos/lib_chuckit_lg.jpg", active?:false, inventory: 21)
-frisbee = dog_shop.items.create(name: "Frisbee", description: "They fly far!", price: 5, image: "https://www.gophersport.com/cmsstatic/img/918/G-10395-FrisbeeFreestyle-features-01-clean.jpg", active?:false, inventory: 21)
+# item_orders - link the order with an item (user info and the item linked to a shop)
+@item_order1 = ItemOrder.create!(item: @tire, order: @order_1, price: @tire.price, quantity: 7)
+@item_order2 = ItemOrder.create!(item: @paper, order: @order_2, price: @paper.price, quantity: 4)
+@item_order3 = ItemOrder.create!(item: @yellow_pencil, order: @order_3, price: @yellow_pencil.price, quantity: 10)
+@item_order4 = ItemOrder.create!(item: @tire, order: @order_4, price: @tire.price, quantity: 2)
+@item_order5 = ItemOrder.create!(item: @paper, order: @order_5, price: @paper.price, quantity: 15)
+@item_order6 = ItemOrder.create!(item: @yellow_pencil, order: @order_6, price: @yellow_pencil.price, quantity: 40)
+@item_order7 = ItemOrder.create!(item: @tire, order: @order_1, price: @tire.price, quantity: 7)
+@item_order8 = ItemOrder.create!(item: @chain, order: @order_7, price: @chain.price, quantity: 10)
+@item_order9 = ItemOrder.create!(item: @shifter, order: @order_4, price: @shifter.price, quantity: 10)
+@item_order10 = ItemOrder.create!(item: @shifter, order: @order_7, price: @shifter.price, quantity: 10)
