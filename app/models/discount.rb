@@ -6,5 +6,6 @@ class Discount < ApplicationRecord
   validates_numericality_of :threshold, greater_than: 4, less_than: 61
 
   belongs_to :merchant
-  has_many :orders
+  has_many :order_discounts
+  has_many :orders, through: :order_discounts
 end

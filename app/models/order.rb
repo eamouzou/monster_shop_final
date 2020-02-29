@@ -1,8 +1,9 @@
 class Order < ApplicationRecord
   validates_presence_of :name, :address, :city, :state, :zip
 
-  belongs_to :discount, optional: true
   belongs_to :user
+  has_many :order_discounts
+  has_many :discounts, through: :order_discounts
   has_many :item_orders
   has_many :items, through: :item_orders
   enum status: %w(pending cancelled packaged shipped)
@@ -40,5 +41,9 @@ class Order < ApplicationRecord
 
   def merchant_total(merchant_id)
     item_orders.joins(:item).where(items: {merchant_id: merchant_id}).sum('item_orders.price * item_orders.quantity')
+  end
+
+  def discounts
+    require "pry"; binding.pry
   end
 end
