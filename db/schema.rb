@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200229215608) do
+ActiveRecord::Schema.define(version: 20200229230448) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,13 @@ ActiveRecord::Schema.define(version: 20200229215608) do
     t.boolean "disabled", default: false
   end
 
+  create_table "order_discounts", force: :cascade do |t|
+    t.bigint "discount_id"
+    t.bigint "order_id"
+    t.index ["discount_id"], name: "index_order_discounts_on_discount_id"
+    t.index ["order_id"], name: "index_order_discounts_on_order_id"
+  end
+
   create_table "orders", force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -102,6 +109,8 @@ ActiveRecord::Schema.define(version: 20200229215608) do
   add_foreign_key "item_orders", "items"
   add_foreign_key "item_orders", "orders"
   add_foreign_key "items", "merchants"
+  add_foreign_key "order_discounts", "discounts"
+  add_foreign_key "order_discounts", "orders"
   add_foreign_key "orders", "discounts"
   add_foreign_key "orders", "users"
   add_foreign_key "reviews", "items"
