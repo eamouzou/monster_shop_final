@@ -5,11 +5,13 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+OrderDiscount.destroy_all
 ItemOrder.destroy_all
 Order.destroy_all
 User.destroy_all
 Merchant.destroy_all
 Item.destroy_all
+Discount.destroy_all
 
 # admin users
 @admin_user = User.create!(name: "John",street_address: "123 Colfax St. Denver, CO",
@@ -19,6 +21,14 @@ Item.destroy_all
 @mike = Merchant.create(name: "Mike's Print Shop", address: '123 Paper Rd.', city: 'Denver', state: 'CO', zip: 80201)
 @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
 @j = Merchant.create(name: "J's Furniture Shop", address: '147 Bike Rd.', city: 'Denver', state: 'CO', zip: 80206)
+
+#discounts - belong to merchants
+@twentyoff = @mike.discounts.create(name: "20%off30ItemsOrMore", percentage: 20, threshold: 30)
+@fiveoff = @mike.discounts.create(name: "5%off10ItemsOrMore", percentage: 5, threshold: 10)
+@fifteenoff = @meg.discounts.create(name: "15%off20ItemsOrMore", percentage: 15, threshold: 20)
+@twentyfiveoff = @meg.discounts.create(name: "25%off25ItemsOrMore", percentage: 25, threshold: 25)
+@tenoff = @j.discounts.create(name: "10%off15ItemsOrMore", percentage: 10, threshold: 15)
+@fortyoff = @j.discounts.create(name: "40%off40ItemsOrMore", percentage: 40, threshold: 40)
 
 #regular users - users with different roles
 @regular_user = @j.users.create(name: "Mike",street_address: "456 Logan St. Denver, CO",
@@ -35,7 +45,6 @@ city: "denver",state: "CO",zip: "80206",email: "merchant@gmail.com",password: "h
 @yellow_pencil = @mike.items.create(name: "Yellow Pencil", description: "You can write on paper with it!", price: 2, image: "https://images-na.ssl-images-amazon.com/images/I/31BlVr01izL._SX425_.jpg", inventory: 100)
 @chain = @j.items.create(name: "Chain", description: "It'll never break!", price: 50, image: "https://www.rei.com/media/b61d1379-ec0e-4760-9247-57ef971af0ad?size=784x588", inventory: 5)
 
-
 # orders - users and their information (tells you which user is ordering and the status of the order)
 @order_1 = @regular_user.orders.create(name: @regular_user.name, address: @regular_user.street_address, city: @regular_user.city, state: @regular_user.state, zip: @regular_user.zip, status: 0)
 @order_2 = @regular_user.orders.create(name: @regular_user.name, address: @regular_user.street_address, city: @regular_user.city, state: @regular_user.state, zip: @regular_user.zip, status: 1)
@@ -44,6 +53,12 @@ city: "denver",state: "CO",zip: "80206",email: "merchant@gmail.com",password: "h
 @order_5 = @regular_user2.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 3)
 @order_6 = @regular_user2.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 0)
 @order_7 = @merchant_user.orders.create(name: @regular_user2.name, address: @regular_user2.street_address, city: @regular_user2.city, state: @regular_user2.state, zip: @regular_user2.zip, status: 3)
+
+#applying discounts to orders
+@order_discount1 = OrderDiscount.create(discount_id: @twentyoff.id, order_id: @order_2.id)
+@order_discount2 = OrderDiscount.create(discount_id: @fiveoff.id, order_id: @order_2.id)
+@order_discount3 = OrderDiscount.create(discount_id: @twentyoff.id, order_id: @order_5.id)
+@order_discount4 = OrderDiscount.create(discount_id: @fiveoff.id, order_id: @order_5.id)
 
 # item_orders - link the order with an item (user info and the item linked to a shop)
 @item_order1 = ItemOrder.create!(item: @tire, order: @order_1, price: @tire.price, quantity: 7)
