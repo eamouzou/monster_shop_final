@@ -42,6 +42,9 @@ Rails.application.routes.draw do
     get '/:merchant_id/dashboard', to: "dashboard#show"
     get '/:merchant_id/items', to: "items#index"
     get '/:merchant_id/discounts', to: 'discounts#index'
+    get '/:merchant_id/discounts/new', to: 'discounts#new'
+    get '/:merchant_id/discounts/:discount_id/edit', to: 'discounts#edit'
+    get '/:merchant_id/discounts/:discount_id', to: 'discounts#show'
   end
 
   namespace :admin do
