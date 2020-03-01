@@ -27,7 +27,18 @@ class Merchant::DiscountsController < Merchant::BaseController
     update_redirect_process(discount)
   end
 
+  def destroy
+    discount = Discount.find(params[:discount_id])
+    remove_all_traces_of(discount)
+    redirect_to "/merchant/#{params[:merchant_id]}/discounts"
+  end
+
   private
+
+  def remove_all_traces_of(discount)
+    OrderDiscount.where(discount_id: discount.id).destroy_all
+    discount.destroy
+  end
 
   def update_redirect_process(discount)
     redirect_to "/merchant/#{params[:merchant_id]}/discounts/#{discount.id}" if discount.save == true
