@@ -21,7 +21,23 @@ class Merchant::DiscountsController < Merchant::BaseController
     create_redirect_process(merchant = @merchant, discount)
   end
 
+  def update
+    discount = Discount.find(params[:discount_id])
+    discount.update(discount_params)
+    update_redirect_process(discount)
+  end
+
   private
+
+  def update_redirect_process(discount)
+    redirect_to "/merchant/#{params[:merchant_id]}/discounts/#{discount.id}" if discount.save == true
+    update_save_error(discount) if discount.save == false
+  end
+
+  def update_save_error(discount)
+    flash[:error] = discount.errors.full_messages.to_sentence
+    redirect_to "/merchant/#{params[:merchant_id]}/discounts/#{discount.id}/edit"
+  end
 
   def discount_params
     params.permit(:name, :percentage, :threshold)
