@@ -20,7 +20,13 @@
         <p><%= quantity %></p>
       </td>
       <td>
-        <p><%= number_to_currency(cart.subtotal(item)) %></p>
+        <% if item.discount_apply?(quantity) == true %>
+            <strike><%=number_to_currency(cart.subtotal(item))%></strike>
+            <p>Discount Applied</p>
+            <p><%= number_to_currency(cart.discount_subtotal(item, quantity))%></p>
+        <% else %>
+            <p><%=number_to_currency(cart.subtotal(item))%></p>
+        <% end %>
         <td>
           <td>
             <p><%= link_to item.merchant.name, "/merchants/#{item.merchant_id}" %></p>
@@ -32,8 +38,15 @@
         </tr>
       <% end %>
     </table>
-    <h3 align="right">Total:
-      <%= number_to_currency(cart.total)%></h3>
+    <% if cart.discount_total_eligible? == true %>
+        <p align="right"><strike><%=number_to_currency(cart.total)%></strike></p>
+        <p align="right">Discount Applied to Total</p>
+        <h3 align="right">Total: <%= number_to_currency(cart.discount_total) %></h3>
+    <% else %>
+      <h3 align="right">Total:
+        <%= number_to_currency(cart.total)%></h3>
+    <% end %>
+
     <center>
       <h2>Shipping Info:</h2>
       <%= form_tag "/orders", method: :create do %>
