@@ -38,13 +38,24 @@
             </center>
           </td>
           <td>
-            <p><%=number_to_currency(cart.subtotal(item))%></p>
+            <% if item.discount_apply?(quantity) == true %>
+                <strike><%=number_to_currency(cart.subtotal(item))%></strike>
+                <p>Discount Applied</p>
+                <p><%= number_to_currency(cart.discount_subtotal(item, quantity))%></p>
+            <% else %>
+                <p><%=number_to_currency(cart.subtotal(item))%></p>
+            <% end %>
           </td>
         </tr>
       <% end %>
     </table>
-    <p>Total:
-      <%= number_to_currency(cart.total) %></p>
+    <% if cart.discount_total_eligible? == true %>
+        <strike><%=number_to_currency(cart.total)%></strike>
+        <p>Discount Applied to Total</p>
+        <p>Total: <%= number_to_currency(cart.discount_total) %></p>
+    <% else %>
+        <p>Total: <%= number_to_currency(cart.total) %></p>
+    <% end %>
     <p><%= link_to "Empty Cart", "/cart", method: :delete %></p>
     <% if @items.keys.any? { |item| item.active? == false } %>
       <p>Can't checkout with inactive items</p>
