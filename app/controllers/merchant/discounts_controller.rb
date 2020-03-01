@@ -18,6 +18,7 @@ class Merchant::DiscountsController < Merchant::BaseController
   def create
     @merchant = Merchant.find(params[:merchant_id])
     discount = @merchant.discounts.create(discount_params)
+    discount.generate_order_discounts
     create_redirect_process(merchant = @merchant, discount)
   end
 

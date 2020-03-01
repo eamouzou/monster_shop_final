@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200229230448) do
+ActiveRecord::Schema.define(version: 20200301220643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 20200229230448) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "image", default: "https://i.picsum.photos/id/866/200/300.jpg"
+    t.bigint "discount_id"
+    t.index ["discount_id"], name: "index_items_on_discount_id"
     t.index ["merchant_id"], name: "index_items_on_merchant_id"
   end
 
@@ -108,6 +110,7 @@ ActiveRecord::Schema.define(version: 20200229230448) do
 
   add_foreign_key "item_orders", "items"
   add_foreign_key "item_orders", "orders"
+  add_foreign_key "items", "discounts"
   add_foreign_key "items", "merchants"
   add_foreign_key "order_discounts", "discounts"
   add_foreign_key "order_discounts", "orders"

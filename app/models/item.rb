@@ -3,6 +3,7 @@ class Item < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_many :item_orders
   has_many :orders, through: :item_orders
+  belongs_to :discount, optional: true
 
   validates_presence_of :name,
                         :description,
@@ -58,4 +59,11 @@ class Item < ApplicationRecord
     new_amount = inventory - item_order.first.quantity
     update(inventory: new_amount)
   end
+
+  def discount_apply?(quantity)
+    Discount.all.any? do |discount|
+      discount.merchant == self.merchant && quantity >= discount.threshold
+    end
+  end
+
 end
