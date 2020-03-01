@@ -6,7 +6,7 @@
 <% @merchant.discounts.each do |discount| %>
   <section id='discount-<%= discount.id %>'>
     <p>Name:
-      <%= link_to "#{discount.name}" , "/merchant/#{@merchant.id}/discounts/#{discount.id}", method: :get%></p>
+      <%= link_to "Show #{discount.name}" , "/merchant/#{@merchant.id}/discounts/#{discount.id}", method: :get%></p>
     <p>Percentage Off:
       <%= number_to_percentage(discount.percentage, precision: 2) %></p>
     <p>Quantity of Single Item Required for Discount?
