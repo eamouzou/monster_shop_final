@@ -16,6 +16,7 @@ RSpec.describe Discount, type: :model do
     it {should belong_to :merchant}
     it {should have_many(:orders).through(:order_discounts)}
     it {should have_many :order_discounts}
+    it {should have_many :items}
 
   end
 end
