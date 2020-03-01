@@ -27,9 +27,8 @@ class OrdersController < ApplicationController
   end
 
   def create_order
-    user = User.find_by(name: params[:name])
-    order = user.orders.create(order_params)
-    create_order_process(user, order)
+    order = current_user.orders.create(order_params)
+    create_order_process(user = current_user, order)
   end
 
   def create_order_process(user, order)
@@ -38,23 +37,23 @@ class OrdersController < ApplicationController
   end
 
   def save_order(user, order)
-    save_order_1(user, order)
-    save_order_2(user, order)
-    save_order_3(user, order)
+    create_item_orders(user, order)
+    delete_session_and_flash_message(user, order)
+    create_order_redirects(user, order)
   end
 
-  def save_order_1(user, order)
+  def create_item_orders(user, order)
     cart.items.each do |item,quantity|
       order.item_orders.create({item: item, quantity: quantity, price: item.price})
     end
   end
 
-  def save_order_2(user, order)
+  def delete_session_and_flash_message(user, order)
     session.delete(:cart)
     flash[:success] = "Your order has been placed!"
   end
 
-  def save_order_3(user, order)
+  def create_order_redirects(user, order)
     if user.role != "regular"
       redirect_to "/profile/orders"
     else
