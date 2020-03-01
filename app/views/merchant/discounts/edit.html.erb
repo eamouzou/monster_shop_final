@@ -1,0 +1,21 @@
+<h1>Edit this Discount</h1>
+
+<%= form_tag "/merchant/#{params[:merchant_id]}/discounts/#{@discount.id}", method: :patch do %>
+  <p><%= label_tag :name %>
+  <%= text_field_tag :name, "#{@discount.name}" %></p>
+
+  <p>The current percentage is <%= @discount.percentage %>.</p>
+
+  <p><%= label_tag :percentage %>
+  <%= number_field_tag :percentage, nil, min: 1, max: 99 %></p>
+
+  <p>The threshold is the quantity of a single item required for the discount
+  to be activated.</p>
+
+  <p>The current threshold is <%= @discount.threshold %>.</p>
+
+  <p><%= label_tag :threshold %>
+  <%= number_field_tag :threshold, nil, min: 1, max: 99 %></p>
+
+  <%= submit_tag 'Edit Discount' %>
+<% end %>
