@@ -1,4 +1,5 @@
 <% if current_user.merchant != nil %>
+  <center><h3><%= link_to 'Manage Discounts', "/merchant/#{current_user.merchant.id}/discounts"%></h3></center>
   <h1><%= current_user.merchant.name %></h1>
   <h3>Address:
     <br>
