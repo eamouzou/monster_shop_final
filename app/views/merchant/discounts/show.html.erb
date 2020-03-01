@@ -1,0 +1,15 @@
+<h2>Discount Information</h2>
+
+<p>Name:
+  <%=link_to @discount.name, "/merchant/#{params[:merchant_id]}/discounts/#{@discount.id}", method: :get %></p>
+<p>Percentage Off:
+  <%= @discount.percentage %></p>
+<p>Quantity of Single Item Required for Discount?
+  <%= @discount.threshold %></p>
+<p>
+  <%= link_to "Edit #{@discount.name}", "/merchant/#{params[:merchant_id]}/discounts/#{@discount.id}/edit", method: :get %>
+  &nbsp; &nbsp; &nbsp;
+  <%= link_to "Delete #{@discount.name}", "/merchant/#{params[:merchant_id]}/discounts/#{@discount.id}", method: :delete %>
+  &nbsp; &nbsp; &nbsp;
+  <%= link_to "All Discounts", "/merchant/#{params[:merchant_id]}/discounts" %>
+</p>

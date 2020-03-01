@@ -1,0 +1,21 @@
+<center><h1>Discounts for this Merchant:</h1></center>
+
+<center><h3><%= link_to "Add New Discount", "/merchant/#{@merchant.id}/discounts/new" %></h3></center>
+
+
+<% @merchant.discounts.each do |discount| %>
+  <section id='discount-<%= discount.id %>'>
+    <p>Name:
+      <%= link_to "Show #{discount.name}" , "/merchant/#{@merchant.id}/discounts/#{discount.id}", method: :get%></p>
+    <p>Percentage Off:
+      <%= number_to_percentage(discount.percentage, precision: 2) %></p>
+    <p>Quantity of Single Item Required for Discount?
+      <%= discount.threshold %></p>
+      <p>
+      <%= link_to "Edit #{discount.name}", "/merchant/#{@merchant.id}/discounts/#{discount.id}/edit", method: :get %>
+      &nbsp; &nbsp; &nbsp;
+      <%= link_to "Delete #{discount.name}", "/merchant/#{@merchant.id}/discounts/#{discount.id}", method: :delete %>
+      </p>
+    <br>
+  </section>
+<% end %>

@@ -41,6 +41,13 @@ Rails.application.routes.draw do
     get '/dashboard', to: "dashboard#show"
     get '/:merchant_id/dashboard', to: "dashboard#show"
     get '/:merchant_id/items', to: "items#index"
+    get '/:merchant_id/discounts', to: 'discounts#index'
+    get '/:merchant_id/discounts/new', to: 'discounts#new'
+    get '/:merchant_id/discounts/:discount_id/edit', to: 'discounts#edit'
+    patch '/:merchant_id/discounts/:discount_id', to: 'discounts#update'
+    get '/:merchant_id/discounts/:discount_id', to: 'discounts#show'
+    post '/:merchant_id/discounts', to: 'discounts#create'
+    delete '/:merchant_id/discounts/:discount_id', to: 'discounts#destroy'
   end
 
   namespace :admin do
