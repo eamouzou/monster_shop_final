@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     get '/:merchant_id/discounts/new', to: 'discounts#new'
     get '/:merchant_id/discounts/:discount_id/edit', to: 'discounts#edit'
     get '/:merchant_id/discounts/:discount_id', to: 'discounts#show'
+    post '/:merchant_id/discounts', to: 'discounts#create'
   end
 
   namespace :admin do
