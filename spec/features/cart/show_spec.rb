@@ -120,15 +120,12 @@ RSpec.describe 'Cart show', type: :feature do
       expect(page).to have_content("$100.00")
 
       9.times { click_on '+'}
-      #here the 5 off discount should be applied because it is 10 of one of that merchant's items
       expect(page).to have_content("$1,000.00")
       expect(page).to have_content("$950.00")
       expect(page).to have_content("10")
       expect(page).to have_content("Discount Applied")
 
       20.times { click_on "+"}
-      #here the 20 off discount should be applied because it is 30 of one of that merchant's items
-      # the 20% off should override the 5 percent off. price should be (100 * 30) * 0.20 = 600
       expect(page).to have_content("$3,000.00")
       expect(page).to have_content("$2,400.00")
       expect(page).to have_content("30")

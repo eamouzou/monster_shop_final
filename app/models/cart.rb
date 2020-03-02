@@ -33,12 +33,15 @@ class Cart
   end
 
   def discount_subtotal(item, quantity)
-    discounts = Discount.all.find_all do |discount|
+    discount = relevant_discounts(item, quantity).max_by {|discount| discount.threshold}
+    item.update_discount_id(discount)
+    ((item.price * (100 - discount.percentage) / 100.to_f) * quantity).round(2)
+  end
+
+  def relevant_discounts(item, quantity)
+    Discount.all.find_all do |discount|
       discount.merchant == item.merchant && quantity >= discount.threshold
     end
-
-    discount = discounts.max_by {|discount| discount.threshold}
-    ((item.price * (100 - discount.percentage) / 100) * quantity).to_f.round(2)
   end
 
   def discount_total_eligible?
@@ -50,7 +53,7 @@ class Cart
   end
 
   def discount_total
-    x = @contents.sum do |item_id, quantity|
+    @contents.sum do |item_id, quantity|
       item = Item.find(item_id)
       if item.discount_apply?(quantity)
         discount_subtotal(item, quantity)
@@ -59,4 +62,5 @@ class Cart
       end
     end
   end
+
 end

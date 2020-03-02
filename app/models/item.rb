@@ -66,4 +66,13 @@ class Item < ApplicationRecord
     end
   end
 
+  def discount_price
+    percent_off = discount.percentage / 100.to_f
+    price * (1 - percent_off).round(2)
+  end
+
+  def update_discount_id(discount)
+    update(discount_id: discount.id)
+  end
+
 end
