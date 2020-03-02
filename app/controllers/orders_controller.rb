@@ -44,7 +44,8 @@ class OrdersController < ApplicationController
 
   def create_item_orders(user, order)
     cart.items.each do |item,quantity|
-      order.item_orders.create({item: item, quantity: quantity, price: item.price})
+      order.item_orders.create({item: item, quantity: quantity, price: item.discount_price}) if item.discount != nil
+      order.item_orders.create({item: item, quantity: quantity, price: item.price}) if item.discount == nil
     end
   end
 
