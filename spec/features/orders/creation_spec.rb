@@ -152,4 +152,63 @@ RSpec.describe "Order Creation", type: :feature do
       expect(page).to have_content("This item is inactive")
     end
   end
+
+  describe "discounts on an order" do
+    before(:each) do
+      @bike_shop = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
+
+      @twentyoff = @bike_shop.discounts.create(name: "20%off30ItemsOrMore", percentage: 20, threshold: 30)
+      @fiveoff = @bike_shop.discounts.create(name: "5%off10ItemsOrMore", percentage: 5, threshold: 10)
+
+      @tire = @bike_shop.items.create(name: "Tire", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 60)
+      @shifter = @bike_shop.items.create(name: "Shimano Shifters", description: "It'll always shift!", active?: false, price: 180, image: "https://images-na.ssl-images-amazon.com/images/I/4142WWbN64L._SX466_.jpg", inventory: 30)
+
+      @regular_user = @bike_shop.users.create(name: "Mike",street_address: "456 Logan St. Denver, CO",
+        city: "denver",state: "CO",zip: "80206",email: "new_email1@gmail.com",password: "hamburger1", role: 1)
+
+      @merchant_user = @bike_shop.users.create!(name: "Ben", street_address: "891 Penn St. Denver, CO",
+                                city: "denver",state: "CO",zip: "80206",email: "new_email2@gmail.com",password: "hamburger2", role: 2)
+
+      visit '/'
+      click_link 'Login'
+      fill_in :email, with: @regular_user.email
+      fill_in :password, with: @regular_user.password
+      click_button 'Log In'
+      visit "/items/#{@tire.id}"
+      click_on "Add To Cart"
+      visit "/items/#{@shifter.id}"
+      @shifter.update(active?: true)
+      click_on "Add To Cart"
+      visit '/cart'
+      within "#cart-item-#{@tire.id}" do
+        35.times { click_on '+'}
+      end
+      within "#cart-item-#{@shifter.id}" do
+        15.times { click_on '+'}
+      end
+    end
+
+    scenario "order is created with discounted prices" do
+      visit "/cart"
+
+      expect(page).to have_content("Total: $5,616.00")
+
+      click_on "Checkout"
+
+      expect(page).to have_content("Total: $5,616.00")
+
+      fill_in :name, with: @regular_user.name
+      fill_in :address, with: @regular_user.street_address
+      fill_in :city, with: @regular_user.city
+      fill_in :state, with: @regular_user.state
+      fill_in :zip, with: @regular_user.zip
+
+      click_button "Create Order"
+      new_order = Order.last
+
+      visit "/orders/#{new_order.id}"
+      expect(page).to have_content("Total: $5,616.00")
+    end
+  end
+
 end
