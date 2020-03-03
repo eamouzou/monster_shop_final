@@ -108,7 +108,7 @@ RSpec.describe 'Cart show', type: :feature do
     end
   end
 
-  it "" do
+  it "shows discounted items" do
     visit '/cart'
     @twentyoff = @bike_shop.discounts.create(name: "20%off30ItemsOrMore", percentage: 20, threshold: 30)
     @fiveoff = @bike_shop.discounts.create(name: "5%off10ItemsOrMore", percentage: 5, threshold: 10)
